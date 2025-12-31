@@ -1,0 +1,300 @@
+Operator Overloading(To continue):
+---------------------
+	Overloading Assignment Operator 
+----------------------------------------------------------	
+	Virtual Functions
+	Early Binding vs. Late Binding
+		Understanding Binding in C++
+			Definition of Binding in the Context of Functions
+			Early (Static) Binding: Concept and Characteristics
+			Late (Dynamic) Binding: Concept and Characteristics
+		Comparing Early and Late Binding
+			Use Cases and Implications of Each Type
+			Performance Considerations
+	Virtual Functions
+		Basics of Virtual Functions
+			Introduction to Virtual Functions in C++
+			How Virtual Functions Enable Polymorphism
+		Implementing Virtual Functions
+			Syntax and Rules for Declaring Virtual Functions
+			Overriding Virtual Functions in Derived Classes
+			Virtual Function Table (VTable) and Virtual Table Pointer (VPtr)
+		Best Practices and Common Pitfalls
+			When to Use Virtual Functions
+			Understanding the Impact on Performance and Memory
+		Pure Virtual Functions and Abstract Base Classes
+			Pure Virtual Functions
+				Definition and Purpose of Pure Virtual Functions
+				Declaring and Implementing Pure Virtual Functions
+		Abstract Base Classes
+			What Makes a Class Abstract
+			Designing Abstract Base Classes for Frameworks and APIs
+			Real-world Examples and Use Cases
+		Advanced Concepts
+			Interfaces in C++ Using Abstract Classes
+			Diamond Problem and Virtual Inheritance
+===========================================================
+Programmers working in C++, usually refer to these 3 functions as 
+	Rule of 3  --> In standard/traditional C++
+	Rule of 5  --> In Modern C++ 
+		As long as there are not pointer as data member in a class, you can rely on the functionality provided by the compiler(default, copy constructors and assignment operator).
+		
+		But if you have pointer as a data member, they you 
+		should not rely on compiler generated code. i.e., to say you have to overload/define your own functions (3 functions mentioned above).
+		
+		In Modern C++, move constructor and move asignment operator is added by making it as Rule of Five(5).
+==========================================================
+	Remember when I did mention on the initialization of objects, there is a difference between initialization and assignment.
+	
+	1. Test obj = 100; //initialization
+	
+	2. Test obj; //default ctor is called.
+		obj = 100 ;// assignment here 
+==========================================================
+	Test& operator=(const Test &);//lvalue reference
+	Test&& operator=(Test &&); --> Move assignment--> rvalue
+============================================================
+Virtual Functions:
+------------------
+	In C++, run-time polymorphism is achieved through virtual functions. As demonstrated yesterday with a brief introduction.
+	
+	What is binding in C++?
+		When you make a call to a function, which functions is to be called is linked during linking phase of the compilation process.
+		
+		Linking the function call to its definition is what is referred to binding. 
+		
+		Remember C++ supports function overloading, so binding determines 
+			1. Which function gets called 
+			2. When the function call is getting resolved.
+		
+		For Example:
+		-----------
+			obj.disp();
+			obj.funOne();
+				--> Which function gets called depends on the binding type(early or late).
+				
+		Early Binding:
+		--------------
+			Function call is resolved at compile time 
+		Because it happens at compile time 
+			1. Execution is faster
+			2. No extra info needed to resolve at run-time
+		This is most-widely used
+			1. Normal functions 
+			2. function overloading
+			3. operator overloading
+			4. Non-Virtual functions
+			5. static functions of a class 
+		
+		Late Binding:
+		-------------
+			Function call is resolved at run-time
+		Because it happens at run-time, 
+			1. Slight delay is resolving at run-time
+			2. Extra memory is allocated for stroring extra info which is needed for run-time resolution(VTable (virtual table) and VPtr (virtual Pointer))
+			
+In C++ implemented using 
+	Virtual functions 
+=========================================================
+	Remember when function overloading is used where you can have multiple functions with same name in same scope (with same class or namespace).
+	
+	When it comes to virtual functions, we talk about having minimum of two classes where base class and derived class having function with signature. Here two functions in diffent scope. This process is referred to as function overriding in derived class. 
+	
+	Using base class Pointer, we can call either base class function or derived class function. Since one pointer (pointer of one class) is used to call different functions.  This is run-time polymorphism.
+	=================================================
+Remember We did discuss on pointers:
+------------------------------------
+	pointers to function:
+	---------------------
+		Pointer is  a variable which stores address. Here we are talking about storing the address of a function. 
+		
+		Once we store the address we can call the function using the pointer. 
+		
+	Let us see some examples here:
+	------------------------------
+	
+	Where is this useful?
+		Remember if you want to pass a function as an argument, then you use pointer to function(in short they call as function pointer)
+		
+		This process is called function callback.
+
+
+	When It comes to virtual functions:
+	-----------------------------------
+		In order to implement run-time/late binding, C++ compiler uses a VTable (virtual table) for each polymorphic class(classes having virtual function).
+		
+		This table is nothing but an array of pointer to functions.
+		
+		In each object of the class, a pointer is introduced to store  address of the VTable, this pointer is referred to as VPtr(virtual pointer).
+		
+		Every object of the polymorphic class and its derived classes will have this VPtr. Initialization of this address is the responsibility of the constructor.
+		
+		i.e., the address of the base class VTable is stored in Base class objects VPtr. 
+		Similarly., the address of the derived class VTable is stored in derived class objects VPtr. 
+		
+		How is Late binding achieved. Let me demonstrate with the help of pointers here.
+	=======================================================
+	Using virtual functions we achieve late binding. 
+		1. Inheritance is involved(minimum of 1 base class and 1 derived class).
+		2. Functions in base and derived class should have same signature.
+		3. base class function should be made virtual. 
+		
+	The virtual function in the base class may or may not be overridden in derived class. 
+	
+	If overridden in derived class, derived class function is called else base class function is called, depending on whether base class pointer or reference variable stores the address of base class object or derived class object.
+	
+Summary of Internal working of virtual functions:
+-------------------------------------------------	
+	What is VTable?
+		A VTable is a lookup table:
+		Created by compiler
+		Stores addresses of virtual functions
+		Each class with virtual functions has one VTable.
+
+	What is VPtr?
+		Each object has a hidden pointer → VPtr
+		VPtr points to the class’s VTable
+
+	Call Flow (Runtime):
+	--------------------
+		Base* b --> object --> vptr --> vtable --> correct function
+
+	Memory Impact:
+	--------------
+		Each object has 1 extra pointer
+		vtable for each class in the hierarchy
+		Slight memory overhead for flexibity
+===========================================================
+Best Practices and Common Pitfalls:	
+	Best Practices
+		When to Use Virtual Functions. 
+		1. One purpose of using inheritance is re-usability of code and second purpose is to achieve polymorphic behaviour.
+		
+		Here the job of your base class is used as an interface for grouping similar working classes.
+		for Example:
+			Animal --> Dog, Cat, Bear
+			DocumentManager --> txtFile, rtfFile, pdfFile, docFile
+			MediaPlayer --> VideoPlayer, AudioPlayer 
+			VideoPlayer --> aviPlayer, mp4Player, mkvPlayer
+			AudioPlayer --> mp3Player, wavPlayer, aacPlayer
+		
+		Here, from the above examples base class acts as an interface to group other related classes(derived)
+		
+		2. Because polymorphic behaviour helps us to organize multiple classes in a hierarchy of classes, this helps to create frameworks(consists of different or multiple classes) or API design.
+		
+		3. Polymorphism here tries to provide a function in base class which in turn can have different implementation in derived classes. (Actual implementation of the interface can be delayed or later written in derived classes).
+		
+	Some of the common pitfalls in Polymorphic classes:
+	Common Pitfalls:
+		1. forgetting to make your destructor virtual
+		2. Calling virtual functions inside your constructors
+			We assume the object is completely initialized once constructor call is finished. Inside the construct the object is assumed to be uninitialized of partially initialized. You should not expect to perform polymorphic behaviour on partially initialized or uninitialized object.
+		3. Use virtual functions only if necessary. If your design requres polymorphic behaviour only then go for it.
+========================================================
+Pure Virtual Functions:
+	where the definition of your virtual function is missing.
+==========================================================	
+Lets take in some Problems:
+---------------------------	
+Problems #1. Shape Drawing System
+
+	Shape
+	 |-- Circle
+	 |-- Rectangle
+	 |-- Triangle
+
+	Requirements:
+		Base class Shape with virtual function draw()
+		Derived classes override draw()
+		Use Shape* to call draw() for different objects
+		
+Problems #2. Payment Gateway System
+
+	PaymentMethod
+	 |-- CreditCard
+	 |-- DebitCard
+	 |-- NetBanking 
+	 |-- UPI
+
+	Requirements:
+		PaymentMethod is abstract
+		Pure virtual function pay(double amount)
+		Demonstrate polymorphism with base pointer
+		
+Problems #3. Banking Account System
+
+	Account
+	 |-- SavingsAccount
+	 |-- CurrentAccount
+	 |-- FixedDepositAccount
+
+	Requirements
+		Virtual functions: calculateInterest(), display()
+		Use base-class references
+		Add virtual destructor	
+========================================================
+Abstract Base Classes
+	What Makes a Class Abstract
+		A class in C++ is said to be an abstract class if it contains atleast one pure virtual function.
+	
+	Properties of an Abstract class:
+		1. You cannot create objects of such classes but you can create pointers and reference variable.
+		2. You can define constructors, destructors
+		3. Abstract class is used as a base class whose pointer or reference variable is used for polymorphic behaviour.
+		
+	Abstract Base classes are used in 
+		frameworks, plugin systems and APIs 
+		
+	Simple API Designing	
+
+		Database --> ABC 
+			virtual void connect() = 0;
+			virtual void query() = 0;
+			virtual void disconnect() = 0;
+		
+		MySQL: public Database
+			overriding the function here 
+			
+		OracleDB: public Database
+			overriding the function here 
+			
+	Using ABC as interface:
+		C++ does not have a keyword interface like Java. We tend to simulate/write a class with no data members and have a pure virtual function 
+		
+		class VideoPlayer{
+		public:
+			virtual void play() = 0;
+			virtual void rewind() = 0;
+			virtual void forward() = 0;
+			virtual void stop() = 0;
+			virtual VideoPlayer() {}
+		};
+		
+Diamond Problem and Virtual Inheritance:
+----------------------------------------
+Problem #4:
+-----------
+Create the following hierarchy without virtual inheritance:
+
+        Person
+       /      \
+   Student    Employee
+       \      /
+        Intern
+		
+Requirements
+	Person has name
+	Student has rollNo
+	Employee has empId
+	Intern inherits from both Student and Employee
+Tasks --> Perform before virtual inheritance
+	Try accessing name from Intern
+	Observe and explain the ambiguity error
+	Print object sizes
+	Access name unambiguously
+	Verify only one Person subobject exists
+	Compare memory size before and after	
+	Observe constructor call order
+	Modify constructors to accept parameters
+	Initialize Person correctly from Intern class
+===========================================================	
