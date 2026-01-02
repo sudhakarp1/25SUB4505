@@ -1,0 +1,170 @@
+Day 9: 2-Jan-2026
+-----------------
+Build Tool Chain
+	Introduction to Build Tools
+		Understanding the Role of Build Tools in Software Development
+		Overview of Common Build Tools
+	Using the g++ Compiler
+		Basics of g++
+			Introduction to g++ and its Role in Compiling C++ Programs
+		Setting up g++ Environment
+	
+	Compilation Process
+			Understanding the Compilation Steps: Preprocessing, Compilation, Assembly, Linking
+			Using g++ Commands for Compiling Single and Multiple Files
+		Compiler Options
+			Common g++ Compiler Flags and Their Usage
+			Optimizing Performance with Compiler Flags
+		Linking with g++
+			Static vs. Dynamic Linking
+			Linking Multiple Object Files and Libraries
+		Debugging with g++
+			Enabling Debugging Information in g++
+			Basic Debugging Techniques
+==========================================================
+Topics covering :
+	Key OOP Concepts Used
+		Base class with common attributes and virtual functions
+		Inheritance for specific Classes
+		Method overriding using virtual
+		Dynamic binding via base-class pointer
+		Dynamic memory allocation using new and delete
+---------------------------------------------------
+Problems #1:
+	Student Management System (Inheritance + Polymorphism)
+Problem Statement
+	In a student management system, different types of students such as Undergraduate, Postgraduate, and ResearchStudent exist.
+
+	Each student has a name and roll number. The system should calculate and display the final grade for each student based on their evaluation criteria.
+
+	Implement inheritance by defining a base class Student containing common attributes and a virtual method calculateGrade().
+	
+	Derived classes must override this method to calculate grades differently.
+
+	The program should dynamically create a student object based on user input and display the calculated grade.
+
+Concepts Tested:
+	Base & derived classes
+	Virtual functions
+	Dynamic object creation
+	Runtime polymorphism
+==============================================================
+Problem #2:
+-----------
+	Employee Payroll System (Inheritance + Dynamic Binding)
+Problem Statement
+	An organization has different types of employees such as FullTimeEmployee, PartTimeEmployee, and ContractEmployee.
+	
+	Every employee has an ID and name. Each employee type has a different salary calculation mechanism.
+	
+	Create a base class Employee with a virtual method calculateSalary().
+	Derived classes must override this method.
+	Based on user choice, dynamically create an employee object, calculate the salary, and display it.
+
+	Here :
+		Full-Time Employee:
+		Has
+			Fixed monthly salary
+			salary = basicPay + allowances;
+
+		Part-Time Employee:
+		Has
+			Paid based on hours worked
+			salary = hoursWorked * payPerHour;
+			
+		Contract Employee:
+		Has
+			Fixed contract amount
+			salary = contractAmount;			
+			
+Concepts Tested
+	Method overriding
+	Polymorphism using base class pointer
+	Dynamic memory allocation
+	Real-world modeling	
+============================================================
+Problem #3:
+-----------
+	Student Attendance System (Array + Inheritance)
+Problem Statement:
+	An attendance system manages students of different programs: Engineering, Arts, and Science.
+	Each student has a name and attendance percentage.
+
+	Create a base class StudentAttendance with virtual method checkEligibility().
+	
+	Derived classes override the method to apply different attendance rules.
+	
+	Store student objects in an array of base class pointers and display eligibility status.
+
+	Basic Requirement:
+		Derived Class Expectations
+			Each derived class implements its own attendance rule.
+
+	Engineering Student
+		Minimum attendance: 75%
+			return attendance >= 75;
+
+	Arts Student
+		Minimum attendance: 65%
+			return attendance >= 65;
+
+	Science Student
+		Minimum attendance: 70%
+			return attendance >= 70;
+			
+	Code sample for calling virtual function using a single object:
+	-----------------------------------------
+		StudentAttendance* s;
+		s = new EngineeringStudent("Rahul", 78);
+		if (s->checkEligibility())
+			cout << "Eligible";
+============================================================
+Problem #4:
+-----------
+	Array Operations System (Abstract Behavior via Inheritance)
+	
+Problem Statement
+
+	An array processing system supports different types of arrays such as IntegerArray, FloatArray, and StringArray.
+	
+	Each array type performs operations like insert elements and display elements.
+
+	Define a base class ArrayBase with virtual methods insert() and display().
+	
+	Derived classes must override these methods to handle different data types.
+	
+	The program should dynamically create an array object based on user input and perform operations.
+
+Concepts Tested
+	Polymorphic behavior
+	Abstract design using base class
+	Runtime method binding
+============================================================
+Lets talk on the compilation Process:
+-------------------------------------
+How the compilation works in C/C++?
+	In C, Compilation is done in 2 phases.	
+	
+		first.c  (program/ASCII text file)
+			|
+			| --> Pre-Processing 
+			|
+		first.i (source file/intermediate file)
+			| 
+			| --> Compilation (I Phase)
+			| 
+		first.s (Assembly code)
+			| 				
+			| --> Assembler
+			|
+		first.o (Object file )
+			|
+			|--> Linking (II Phase)
+			|
+		first.exe (Executable file)
+--------------------------------------------------------
+Same program demonstrated with 	
+	Program can be written in 1 C file 
+	Program having 3 files 1 h file, 2 C files 
+	Program having 7 files 1 h file, 6 C files 
+---------------------------------------------------------
