@@ -1,0 +1,187 @@
+Day 10: 5-Jan-2025
+------------------
+File I/O
+	File I/O and File Handling
+	Streams
+		ofstream
+		ifstream
+		fstream
+		File Position Pointers
+		
+Exception Handling
+	Basics of Exception Handling
+	try, catch, and throw Keywords
+	Standard Exceptions
+	Uncaught Exceptions
+
+Namespaces
+	Understanding Namespaces
+	Rules of Namespaces
+
+Smart Pointers
+	Introduction to Smart Pointers
+	Types of Smart Pointers
+		auto_ptr
+		unique_ptr
+		shared_ptr
+		weak_ptr
+
+Templates
+	Advantages of Templates
+		Introduction to Templates in C++
+		Code Reusability and Efficiency
+		Type Safety and Flexibility
+	Function Templates
+		Basics of Function Templates
+		Creating and Using Function Templates
+		Template Specialization and Overloading
+	Class Templates
+		Understanding Class Templates
+		Implementing Generic Classes
+		Class Template Specializations
+		Member Functions in Class Templates
+============================================================
+============================================================
+File I/O
+	File I/O and File Handling
+	Streams
+		ofstream
+		ifstream
+		fstream
+		File Position Pointers
+===========================================================
+File I/O in C++:
+----------------
+	File Input/Output in C++ involves a collection of classes with the hierarchy mentioned in the diagram. 
+------------------------------------------------------------
+	while (cin>>ch ) //using extraction operator 
+		cout<<ch ;
+		
+		When you use the above mentioned statements are used the program, it accepts the input from the keyboard,
+		excluding the white-space characters(space, tab, new line).
+===========================================================	
+	while (cin.get(ch))
+		cout<<ch ;
+	
+		Instead of insertion(<<) operator, if we use get() method of istream class, it will accept all the character including white-space characters.
+============================================================
+Command line arguments:
+-----------------------
+	Command Line Arguments in C/C++ is passing arguments to main(). 
+	
+	main() takes two arguments
+		1. int argc --> takes number of arguments 
+		2. char *argv[] --> List of the arguments 
+		
+	To summarize:
+
+
+	C++ provides file handling via <fstream> header:
+	Class			Purpose
+	-----------------------
+	ifstream		Read from file
+	ofstream		Write to file
+	fstream			Read + Write	
+	
+	
+	If you are using fstream class for performing both input and output or you can perform input only or output only.
+	
+	If you are using the above mentioned fstream class to create object, you can use file opening mode flags as second argument. 
+============================================================
+	for example:
+	1. using constructor. 
+		fstream fObj(filename, mode);
+		fstream fObj("fileExample.txt", ios::in);
+			--> meant for input mode /read mode 
+		fstream fObj("fileExample.txt", ios::out);
+			--> meant for output mode /write mode 
+		ofstream fObj("fileExample.txt", ios::app);
+			--> meant for append mode
+		ofstream fObj("fileExample.txt", ios::trunc);
+			--> meant for truncate mode. Erase old file contents at the time of opening the file.
+		fstream fObj("fileExample.txt", ios::in|ios::out);
+			--> meant for input/output mode read/write mode
+		fstream fObj("fileExample.txt", ios::in|ios::binary);
+			--> meant for input in binary mode
+=============================================================
+Problems :
+----------
+	1. Implement your own cat program, which will take file name as an argument and print the contents of the file on the screen.
+	
+	2. Update your own cat program, which will take -n option and file name as an arguments and print the contents of the file on the screen along with the line numbers.
+	
+	3. Implement your wc program, which takes in file name as an argument and print number of lines, number of words and number of characters present in the file along with the file name 
+	command Prompt $ ./wc ioOne.cpp
+	9  16 100 ioOne.cpp
+		here 9 lines, 16 words and 100 characters.
+		
+	What are File Pointers?
+
+	File pointers keep track of the current position in a file for:
+		Reading --> get pointer
+		Writing --> put pointer
+
+	Function	Purpose
+	-------------------
+	tellg()		Current read position
+	tellp()		Current write position
+	seekg()		Move read pointer
+	seekp()		Move write pointer	
+	
+From where you want to move your cursor/file pointer position.
+	ios::beg  --> Begining of the file 
+	ios::cur --> current position
+	ios::end --> End of the file 
+	
+Problems:
+---------
+	4. Student Record Management
+		Create a binary file–based program to manage student records.
+
+		Each record contains:
+			Roll number
+			Name
+			Marks
+		
+		Operations:
+			Create (add student)
+			Read (display all students)
+			Update marks of a student using roll number
+			Delete a student record
+		Requirements:
+			Use a class
+			Store objects directly in a binary file
+			Use file pointers (seekg, seekp)
+		
+	5. 	Book Inventory (Create + Read)
+			Maintain a binary file of books.
+		Fields:
+			Book ID
+			Title
+			Price
+		Operations:
+			Add book
+			List all books	
+---------------------------------------------------------	
+	6. Library Management System
+			Create a binary file–based library system.
+		Fields:
+			Book ID
+			Book name
+			Author
+			Availability status
+		Operations:
+			Add book
+			Issue book
+			Return book
+			Delete book record
+----------------------------------------------------------	
+==========================================================
+Next Topic:
+-----------
+	Exception Handling
+		Basics of Exception Handling
+		try, catch, and throw Keywords
+		Standard Exceptions
+		Uncaught Exceptions
+==========================================================
