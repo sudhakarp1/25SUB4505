@@ -1,0 +1,232 @@
+day 11: 6-Jan-2026:
+-------------------
+Next Topic:
+-----------
+	Exception Handling
+		Basics of Exception Handling
+		try, catch, and throw Keywords
+		Standard Exceptions
+		Uncaught Exceptions		
+=========================================================
+Namespaces
+	Understanding Namespaces
+	Rules of Namespaces
+
+Smart Pointers
+	Introduction to Smart Pointers
+	Types of Smart Pointers
+		auto_ptr
+		unique_ptr
+		shared_ptr
+		weak_ptr
+
+Templates
+	Advantages of Templates
+		Introduction to Templates in C++
+		Code Reusability and Efficiency
+		Type Safety and Flexibility
+	Function Templates
+		Basics of Function Templates
+		Creating and Using Function Templates
+		Template Specialization and Overloading
+	Class Templates
+		Understanding Class Templates
+		Implementing Generic Classes
+		Class Template Specializations
+		Member Functions in Class Templates		
+==========================================================
+Next Topic:
+	Exception Handling
+		Basics of Exception Handling
+		try, catch, and throw Keywords
+		Standard Exceptions
+		Uncaught Exceptions		
+=====================================================
+Using C Style example with a C++ program, I will demonstrate the usage of exceptions and exception handling
+	In order to handle exceptions, we use try, catch and throw statements/keywords.
+	
+	We will try to understand the concept:
+
+	Exception handling is a mechanism to detect, handle and recover from runtime errors without crashing the program.
+	
+	What is an exception?
+		An exception is an unexpected runtime error that disrupts normal program execution.
+		
+	Some of Runtime errors:
+		--> divide by Zero 
+		--> File not found
+		--> Array index out of bounds (segmentation fault)
+		--> Memory allocation Failure
+		
+	Why do we need exception handling?
+		This is to ensure graceful exit from the program rather than crashing(abrupt termination of the program).
+		
+		With out Exception Handling:
+			program terminates abruptly
+			Some times you do not know why program crashed (No proper error messages)
+			Once program crashed no way to recover the program you have to restart.
+		
+		With Exception Handling:
+			Program continues gracefully 
+			Error handled in one place 
+			Cleaner code separation from the error generating code (Put those code that might raise exceptions inside the try catch block and remaining code outside the block).
+Problem:
+--------
+	1. Implement your DynArray class program where memory is allocated dynamically.
+		Make sure you use exceptions for incorrect size and handle it.
+		
+	2. Implement your MyString class program where memory is allocated dynamically.
+		Make sure you use exceptions for incorrect size and handle it.
+-----------------------------------------------------------
+Let us understand the syntax and the flow of control in exception handling code:
+
+	From the moment exception is raised, until this exception is not handled(caught using catch statement), no executable statement is executed.
+	
+	All unhandled/uncaught exceptions will call terminate method which intern will call abort() which will abruptly exits (crash) from your program.
+	
+	Since terminate() functions is called on unhandled exception, we can register our own program using set_terminate() so that our own function is called before calling abort() function.
+========================================================
+Standard Exceptions:
+--------------------
+	C++ provides predefined exception classes in <exception> and <stdexcept> header files.
+	
+	Commonly used standard exceptions:
+	----------------------------------
+		exception --> Base class for all exceptions
+		runtime_error --> runtime error 
+		logic_error	--> Logical errors 
+		out_of_range --> Index out of range
+		invalid_argument --> Invalid argument 
+		bad_alloc	--> Memory allocation failure
+		
+	When you are raising exception of class type(object type), these objects can be caught by value, address and reference.
+--------------------------------------------------------
+Unwinding of stack:
+-------------------
+	What stack are we talking?
+		When I did mention on the memory layout of a program within which we have different segments in which stack is the one that stores the memory for function calls(stack frame)
+		
+		Remember the example that was used to demonstrate this, there were couple of examples one is recursion.
+	
+	Unwinding of stack...
+		During unwinding of stack, the destructors of local(stack based) objects will be called.	
+		
+		If you use heap based(Dynamically allocated) objects, destructors are not called.
+	
+	Instead of exposing the pointer directly to the exception based code, we tend to wrap around the pointer inside a class. There by using the object which encloses the pointer where pointer is used indirectly.
+=============================================================
+	This wrapper class provides basic exception safety net for the pointer of the Test class.
+	
+	This idea forms the  basis for smart pointer classes.
+======================================================
+
+With this I will stop discussion on Exception Handling
+======================================================
+Next Topic:
+-----------
+	Namespaces
+		Understanding Namespaces
+		Rules of Namespaces
+
+	Smart Pointers
+		Introduction to Smart Pointers
+		Types of Smart Pointers
+			auto_ptr
+			unique_ptr
+			shared_ptr
+			weak_ptr
+===========================================================
+Namespaces
+	Understanding Namespaces
+	Rules of Namespaces
+
+In C++, we do not want the corrupt/mangle the global space bu having global variables, functions.
+
+We tend to create a scope(brackets/block) with a name to enclose the declarations without putting everything in the global space.
+
+We can the user-defined names(identifiers) like 
+	variables 
+	functions 
+	classes 
+	objects 
+	
+	This helps in avoiding named conflicts in larger programs and when using different libraries.
+	
+	for example:
+		if you are using standard library we use a namespace std;
+		
+			std::string strOne;
+		
+		There is an external library which is famous called boost C++ library.
+		
+			boost::string str;
+		
+		Here we are using string class from two different libraries.
+===========================================================
+Creating user define namespace:
+	Here we can keep variables and functions with the same name with different namespaces without any conflicts.
+	
+	All we have to do is use scope resolution operator.
+===========================================================
+Standard Namespace(std):
+------------------------	
+	C++ standard library uses a namespace std.
+	
+	for example:
+		std::cout<<"Hello World!..."<<std::endl;
+		
+		std::string var="Hello World";
+		
+		std::vector<int> vInt(10);
+		
+	or 
+		you can use using namespace std;
+		
+		using namespace std; #using directive
+		cout<<"Hello World!..."<<endl; 
+		string var = "Hello World!...";
+		vector<int> vInt(10);
+		
+Programmers in project prefer to use Using Declarations rather than Using directives.
+	Using Declarations:
+		using std::cout;
+		using std::cin;
+		using std::endl;
+
+	Using Directive:
+		using namespace std;
+		using namespace Mine;
+===========================================================
+Different types of Namespaces in C++:
+	Named namespace --> giving a name 
+	Anonymous namespace --> namespace without a name 
+	Nested namespace --> one namespace inside another
+	Modern C++ --> inline namespace 
+	
+Rules of namespace :
+--------------------
+	1. Should be used in global space 
+	2. Namespace can be defined multiple times 
+	3. Accessing them using keyword or scope resolution operator.
+	4. No need to add semi-colon at the end of namespace
+	5. Namespaces can contain 
+		variables
+		functions 
+		classes 
+		struct 
+		enum 
+		other namespaces (nesting)
+			You cannot put main() inside a namespace 
+			
+	6. Namespace Aliases(shortcuts) are allowed 
+			namespace small=LengthyNameSpaceName 
+			small::var 
+			small::funOne()
+			
+	7. Do not tamper with the std namespace or create a namespace with std in your program 
+	
+		namespace std{
+			var = 100;
+			void funOne(){cout<<"std::funOne()"<<endl; }
+		}
+========================================================
