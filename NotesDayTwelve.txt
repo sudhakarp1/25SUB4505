@@ -1,0 +1,394 @@
+Day Twelve: 7-Jan-2026
+======================
+Templates
+	Advantages of Templates
+		Introduction to Templates in C++
+		Code Reusability and Efficiency
+		Type Safety and Flexibility
+	Function Templates
+		Basics of Function Templates
+		Creating and Using Function Templates
+		Template Specialization and Overloading
+	Class Templates
+		Understanding Class Templates
+		Implementing Generic Classes
+		Class Template Specializations
+		Member Functions in Class Templates
+-------------------------------------------------------
+Smart Pointers
+	Introduction to Smart Pointers
+	Types of Smart Pointers
+		auto_ptr
+		unique_ptr
+		shared_ptr
+		weak_ptr
+===========================================================
+Class SmartDevice
+	string name;
+	bool state;
+
+	SmartDevice()
+	virtual void display();
+	void controlDevice(bool ) = 0;
+	virtual ~SmartDevice(){
+	
+	}
+
+class Light:
+	
+class Motor:
+
+class Thermostat:
+
+
+int main(){
+	enum states = {OFF, ON};
+	SmartDevice *sPtr = new Light("Light", OFF);
+	sPtr->display();
+	sPtr->controlDevice(ON);
+	sPtr->display();
+	
+	sPtr = new Motor("Motor", OFF);
+	sPtr->display();
+	sPtr->controlDevice(ON);
+	sPtr->display();
+}
+==========================================================
+Templates:
+	C++ is said to be a strongly typed language. i.e., to say it differentiates functions with same name with different data types as arguments. 
+	
+		void fun(int );
+		void fun(char );
+		void fun(double );
+		void fun(float );
+--------------------------------------------------------
+	When your functions/algorithm is same but the data type is different then you can go for function template.
+	
+	C++ is said to support different types of programming:
+		1. Procedural/function oriented programming
+		2. Object Oriented Programming
+		3. Generic Programming --> Your focus is on solving problems rather than the data type. Here we dont bother what kind of data type is used.
+		
+	C++ support/implementation of generic programming is through templates.
+		Template is the syntax used in C++ for implementing generic programming.
+-----------------------------------------------------------
+	Templates allow you to write generic code that works on any data type.
+		"Write once , use for many types"
+	
+	Advantages of templates:
+	------------------------
+		Code Reusability and Efficiency:
+		--------------------------------
+			1. One function/class works for many types 
+			2. Eliminates duplicate code  (You dont need to copy paste the same code for different data types)
+			
+			3. Compiler internally generates code for specific data type depending on the argument passed.
+				if you are passing int --> fun (int ) is generated at compile time 
+			Because all these are done during compile time no run-time overhead and it is faster that the polymorphism(virtual function calls)
+-----------------------------------------------------
+	Type safety & Flexibility:
+	-------------------------
+		Any errors are generated at compile time 
+		Since separate copies are generated at compile time strong typed nature of C++ is maintained.
+		
+	Function Templates:
+	-------------------
+		Applying the templates on function:
+		
+		syntax:
+			template<typename T>
+			return_type funcName(arguments){
+			
+			}
+			
+		for Example:
+			template<typename T>
+			T Add(T x, T y){
+				return x+y;
+			}
+			
+	Function template with multiple argument:
+	-----------------------------------------
+	template <typename DT, typename DU>
+	void fun(DT varOne, DU varTwo){
+		cout<<"varOne: "<<varOne<<"\tvarTwo: "<<varTwo<<endl;
+	}
+	
+	Function template overloading:
+	-----------------------------
+		Just like normal functions function template can be overloaded based on number of arguments 
+		
+	Template Specialization(function):
+	---------------------------------
+		When you want to implementation for a specific type.
+	
+	Class Template:
+	---------------
+		Applying the template syntax on classes to create generic classes. 
+		
+		template<typename T>
+		class className{
+			T data;
+		public:
+			//functions here
+		};
+		
+	Defining members functions inside the class 
+	
+	Defining members outside the class 
+	
+	Specialization of template class
+		
+	Partial spacialization 
+		for Example:
+		
+		template <typename T, typename U>
+		class Pair{ //generic
+			T key;
+			U value;
+		};
+		
+		template<typename T>
+		class Pair<T, int> { //partial spacialization
+			T key;
+			int value;
+		};
+	===========================================================
+STL --> Standard Template Library
+=================================
+	This library consists lots of classes and functions using templates. So these classes and functions are generic classes and generic functions.
+	
+	These classes are categorized into 3 groups for easy understanding.
+	
+	1. Containers:
+		here we have collection of classes for implementing data structures like 
+		Sequence containers:
+		---------------------	
+			vector<dataType> vObj;
+				--> Dynamic array generic class 
+			
+			list<dataType> lObj;
+				--> Linked List generic class 
+			
+			deque<dataType> dObj;
+				--> double ended queue where insertion and deletion can be done on both ends.
+				
+			array<dataType> aObj;
+				--> Fixed size array class 
+				
+			forward_list<dataType> flObj; 
+				--> Singly Linked List
+				
+		Associative Containers:
+		-----------------------
+			Elements stored in a sorted order. Elements are treated as keys.
+			
+			Ordered containers:
+			--------------------
+				Here the underlying data structure is binary trees(Red Black Binary trees).
+				
+				set<dataType> sObj;
+					does not allow duplicates
+				multiset<dataType> 
+					allow duplicates
+				
+				map<key, value> mObj;
+					does not allow duplicates
+				multimap<key, value> mtObj;
+					allow duplicates
+				
+			Unordered Containers:
+			---------------------
+				Here the underlying data structure is hashing and hash tables.
+				
+				unordered_set
+					#include <unordered_set>
+					unordered_set<int> sOne = {10, 20, 30};
+				
+				unordered_map 
+		
+	2. Algorithms:
+	---------------
+		Algorithms are collections of generic functions which work on container classes.
+		
+		commonly used algorithms on
+		
+			sort()
+			find()
+			copy()
+			cout()
+			find_if()
+			reverse()
+			binary_search()
+	
+	3. Iterators:
+	-------------
+		Iterators are classes which work like pointers which is used to traverse(accessing from first to the last element(all elements at least once)) containers.
+		
+		Here Iterators are classified as :
+			Input 
+			Output
+			Forward 
+			Reverse 
+			Bidirectional 
+			Random access 
+==============================================================
+Problems:
+---------
+1. DynArray:
+		Implement a generic class so it can be an array of any type.
+	Operations:
+		Constructor
+			default 
+			parameterized 
+				single --> size 
+				two --> size, element			
+		Destructor 
+		Display()
+------------------------------------------------------
+2. MyStack:
+		Design a generic stack using class templates.
+	Operations
+		push
+		pop
+		top
+		isEmpty
+------------------------------------------------------
+3. Matrix:
+		Create a class template Matrix<T>:
+	Operations:
+		Store 2D matrix
+		Add two matrices
+		Display matrix
+=======================================================
+Next Topic:
+-----------
+	Smart Pointers
+		Introduction to Smart Pointers
+		Types of Smart Pointers
+			auto_ptr
+			unique_ptr
+			shared_ptr
+			weak_ptr
+--------------------------------------------------------
+Smart pointers:
+---------------
+	We did discuss on pointers some time back, and we solved some classes with dynamic memory allocation 
+	
+	
+	int *iPtr = new int[10];
+		//raw pointer --> Usage of pointers directly 
+		
+	From the programmers point of view:
+		Programmer must take care of these issues that might arise when using pointers with dynamic memory allocation.
+		
+		1. memory leak:
+		
+			int *iPtr = new int[100];
+				//memory is allocated here.
+				
+			int var = 10;
+			
+			iPtr = &var; //assigning new address
+			
+			//there is a memory leak 
+			delete iPtr;
+------------------------------------------------
+		int main(){
+			int iVar = 10;
+			//perform task here using iVar
+			//cout<<"IVar: "<<iVar<<endl; //
+			iVar = 20;
+			cout<<"IVar: "<<iVar<<endl; //
+		}
+
+	2. Dangling Pointer
+		Pointer holding the address of the deleted memory.
+		
+		Two or more pointers pointing to the same location. When one object goes out of scope, the pointer in the other objects becomes a dangling pointer. (We did discuss this in shallow copy of objects) 
+	
+	3. Double deletion
+		Because of dangling pointer due to shallow copy.
+		
+	4. Exception Unsafe code
+		During unwinding of stack, destructors of local objects are called. 
+		When destructors for heap based objects are not called, resulting in memory leakage.
+
+In order to handle the above mentioned issues:
+	Smart pointer classes are introduced to handle these issues as part of the standard library.
+===========================================================	
+	Smart Pointers are template classes provided in the standard library(Modern C++) that 
+		1. Automatically manage dynamic allocated memory 
+		2. Delete memory when object goes out of scope 
+		3. RAII (Resource Acquisition Is Initialization)
+			The job of this class is to provide wrapping around a pointer where the pointer and its memory allocation is not exposed directly to the exception code(the code that might arise exception).
+			
+			Yesterday I introduced a class Pointer with Test class pointer.
+==========================================================
+	Why do we use smart pointers?
+		1. Automatic memory management 
+		2. Exception safety
+		3. Clear ownership semantics
+		4. Prevent memory leaks 
+		5. Part of Modern C++.
+
+	What is ownership semantics?
+		1. Pointer is a variable which stores address of another variable. 
+		
+		Dynamically allocated memory in the heap is treated as a resource.
+		
+		At any given point of time if one pointer points(stores) to the heap memory, then the ownership is exclusive. 
+		
+		If two or more pointers pointing to the same location in heap then it is shared ownership.
+		
+		What is tranfering ownership?
+			iPtr = new int[100];
+			//storing the data into the location
+			
+			iPtrOne = iPtr; 
+			//address is copied here 
+			//now two pointers iPtrOne and iPtr are storing the same address.
+			
+			iPtr = nullptr; 
+				//iPtr variable is now pointing to null or giving up the ownership to iPtrOne variable.
+			
+=============================================================
+In modern C++:
+	These are the classes provided as part of smart pointer. 
+	
+	unique_ptr --> Exclusive ownership, cannot be copied , but can be moved (cut and paste not copy and paste).
+	
+	shared_ptr --> Shared ownership, multiple owners, internally uses reference counter to keep track of number of owners. Resource is deleted only when this reference count becomes 0(no more owners left). 
+	
+	weak_ptr --> 
+		--> as part of non-owning reference to shared_ptr. 
+		It does not increase reference count 
+		used to avoid circular dependency.
+====================================================
+	What is circular/Cyclic Dependency:
+		class A 
+			shared_ptr<B> b;
+		
+		class B 
+			shared_ptr<A> a;		
+======================================================
+
+There was a simple smart pointer class auto_ptr introduced in traditional C++ (C++98) which was deprecated in C++11 and later(C++17) version completely removed.
+	Because of unsafe-ownership transfer semantics.
+	
+	auto_ptr<int> ptrOne(new int(100));
+	auto_ptr<int> ptrTwo = ptrOne; 
+	
+		This was introduced in C++98, where move semantics were not introduced. Where as when compared with unique_ptr, copying is not allowed but moving was allowed.
+===========================================================
+Problems:
+---------
+
+4. Create an Dynamic array program that we used in exception handling yesterday without classes inside createArray(size);
+	instead of using raw pointer use unique_ptr. (Yesterday's program involved using raw pointer)
+	
+	Task to perform:
+		1. Initialize values 
+		2. Print elements 
+		3. Ensure proper cleanup 
+============================================================
