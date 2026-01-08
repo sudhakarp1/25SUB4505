@@ -1,0 +1,217 @@
+Day 13: 8-Jan-2026:
+-------------------
+Understanding Multi-threading in C++
+	Introduction to Multi-threading
+		Concepts of Parallelism and Concurrency
+		Basics of Threads in C++
+	Working with Threads
+		Creating Threads in C++
+		Thread Management
+		Lambda Expressions and Threads
+	Synchronization and Advanced Concepts
+		Race Conditions and Data Races
+		Mutexes and Locks
+		Lock Guards and Unique Locks
+	Advanced Multi-threading Techniques
+		Condition Variables
+		Futures and Promises
+		Thread Pools
+========================================================
+Introduction to Multi-threading:
+	Multi-threading is the ability of a program to execute multiple sequences of instructions(thread/separate control flow) concurrently within a single process. 
+	
+	Till now, whatever program we wrote were single execution flow program.
+	
+	When a program is executed, it becomes the process (running program is referred to as a process).
+	
+	Within a single process, we can have single execution flow or multiple execution flow. 
+	
+		If single execution flow then we refer it to as single thread process.
+		
+		If multiple execution flow within a process then it is referred to as multi-threaded process.
+	
+		Each thread shares the same address(Memory layout --> static part, heap) but can run independently. For running independently stack memory of each thread is separate.
+	
+	Why do we need multi-threading?
+		1. Multi-core processors:
+			Modern Desktops/Laptops/Mobile phones comes with multi-core processors.
+			Because of we would like to maximally utilization of the CPUs as an important computer resource.
+		2. Because of multi-threading, the responsiveness and the performance of your code is improved.
+		
+		3. Except the user interaction (I/O) remaining processing can be done in the background.
+		
+Concepts of Parallelism and Concurrency:
+---------------------------------------	
+	Parallelism:(Multi-processing)
+		1. Multiple programs/processes running on multiple processors/Core simultaneously
+		2. Requries multi-core / multi-Processor machines 
+		3. If your program is focused on CPU bound processes then go for parallelism.
+		For example:
+			Big number crunching
+
+	Concurrency:(Multi-threading)
+		1. Multiple tasks within a single program 
+		2. Can be executed on a single core / processor machine
+		3. If your program is based on IO bound processing then choose this.
+		Example:
+			Web server servicing multiple client requests
+
+Todays focus is on multi-threading in Modern C++:
+-------------------------------------------------
+
+	Modern C++ (C++ 11) introduced multi-threading support through <thread> header file. Remember the underlying thread library could be the native to that operating system. 
+		For example: 
+			In Windows, windows threads are used as the underlying native thread library. 
+		
+			In Linux, pthread is used as the native thread library internally. pthread stands for POSIX thread library.
+	
+	Within this <thread> header, thread class is defined inside std namespace 
+
+	thread class object represents single thread of execution. 	
+	Once object of thread class is created it starts execution immediately.
+	
+	Let me just demonstrate the concurrent execution of a program with 2 threads 
+
+Lambda Expressions in C++:
+--------------------------
+	A Lambda expression is a way to define a small, anonymous function. It allows you to create functions "on the fly" without having to declare a separate function in your code.
+	
+	Lambda Expressions are usually used in C++ for functional programming and for passing functions as arguments to other functions.
+	
+Thread Management:
+------------------
+	After creating a thread, you can either call join() or detach().
+	
+	join()
+		--> Blocks (execution fo the code is stopped/put on hold) until the thread finishes execution
+		--> Mandatory (Must use for the thread cleanup/thread is destroyed properly)
+	
+	detach()
+		--> allows the thread to run independently
+		--> No need to wait for the thread completion (thread synchronization) with the main thread.
+	
+Problem:
+--------
+
+	1. Hello World 
+		Create a program that creates a single thread.
+		Prints "Hello world from thread"
+		Prints "Hello world from main"
+	using 
+		std::thread 
+		join()
+		
+	2. get_id() --> Printing ID of the thread.
+		Create 3 threads so that they can 
+			print its own thread ID using 
+				std::this_thread::get_id() 
+	
+	3. Print 1 to 10 
+		a. passing function as argument 
+		b. passing lambda as argument
+	
+	4. join & detach 
+		Create 2 threads
+			one thread is joined 
+			one thread is detached 
+		task:
+			print "hello world" to show execution order 
+		Experiment:	
+			What happens if main() exits first.
+
+	5. Create 5 threads using vector to store thread objects. synchronize with main using join() with all 5 threads.
+	
+	6. Create an array of 100 elements(global or static array), create 5 threads from main, fill the array elements where each thread fills 20 elements only.
+	
+=============================================================
+	Function Operator 
+		FUNCtion operaTOR 
+		functor --> 
+			A class which has function operator () overloaded.
+-------------------------------------------------------------
+Next Topic:
+-----------
+	Synchronization and Advanced Concepts
+		Race Conditions and Data Races
+		Mutexes and Locks
+		Lock Guards and Unique Locks
+-------------------------------------------------------------
+In a multi-threaded environment, 
+	stack is separate for each thread 
+	heap, data and BSS are shared among all the threads.
+-------------------------------------------------------------
+What is a race condition?
+	A race condition occurs when:
+	 -->  2 or more threads access shared data.
+	 -->  When order of execution between these threads accessing the shared data is not known 
+	 -->  Because of the above 2 points, outcome of the program is not predictable(Every time your program executes it gives different results).
+	 
+	
+What is a data race?
+	data race in a specific type of race condition where 
+	-->Two or more threads access the same memory location
+	-->Among these threads, if one thread performs write operation.
+	-->No synchronization is used(ensuring the order of execution is maintained(synchronization)).
+	
+	In order to synchronize the order of execution, there are different mechanisms provided.
+	1. mutex (Mutually Exclusive) variable:
+		Also referred to as binary semaphore.
+		This ensures only one thread at a time can access the shared resource.
+
+	Using mutex, one has to perform lock() and unlock().
+
+	If the programmer forgets to unlock(), or during exceptions unlock() is missed, it will result in deadlock.
+	
+	Limitation of using mutex:
+		1. It is one of the simplest way of synchronization. 
+		2. manually you have perform lock()/unlock(), forgetting to unlock will result in deadlock.
+		3. Deadlock may occur due to exceptions as well.
+		4. Hard to maintain
+		
+	lock_guard<> object:
+		1. RAII wrapper for mutex class 
+		2. Locks on creation of the lock_guard object. 
+		3. Unlocks on destruction automatically (if object goes out of scope or if exception occurs, during unwinding of stack destructors of local objects are called which in turn release/unlocks the mutex.)
+	
+	Advantages:
+		exception safe environment
+		works even if unlock() not used 
+		simple and fast RAII class. 
+	Limitation:
+		1. Cannot unlock manually(Unlocking is done through destructor only)
+		2. Cannot transfer ownership of the mutex. (Here mutex is an important resource)
+		
+	Instead of lock_guard, you can use unique_lock:
+		It is more flexible that lock_guard class 
+		Supports:
+			deferred locking (delayed locking)
+			Manual lock/unlock 
+			Allows Ownership of transfer
+	
+	Manually lock/unlock:
+	--------------------
+	
+		unique_lock<mutex) lock(mVar);
+		counter++;
+		lock.unlock();
+		
+7. Apply unique_lock on your mutex program.
+=======================================
+Diferred lock using unique_lock:
+--------------------------------	
+
+Approach for problem #6:
+-----------------------
+Design Approach (Step-by-Step)
+	Use a global array of size 100
+		Divide work equally:
+			Thread 0 --> index 0–19
+			Thread 1 --> index 20–39
+			Thread 2 --> index 40–59
+			Thread 3 --> index 60–79
+			Thread 4 --> index 80–99
+		Each thread receives:
+			Starting index
+			Number of elements to fill(20)
+		No mutex required (no shared index overlap)
+
