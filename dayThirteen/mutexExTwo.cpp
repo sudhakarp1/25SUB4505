@@ -29,7 +29,7 @@ int main(){
 	mVar.lock();
 	for (int cnt=0;cnt < 100000; cnt++)
 		globVar++;
-	mVar.unlock();
+	//mVar.unlock(); //no unlock() will result in deadlock
 
 	t1.join();
 	t2.join();
