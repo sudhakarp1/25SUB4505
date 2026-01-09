@@ -1,0 +1,258 @@
+Day 14: 9-Jan-2026:
+-------------------
+
+Lock Guards and Unique Locks
+Advanced Multi-threading Techniques
+	Condition Variables
+	Futures and Promises
+	Thread Pools
+====================================================
+Manually lock/unlock:
+--------------------
+	unique_lock<mutex) lock(mVar);
+	counter++;
+	lock.unlock();
+-------------------------------------
+Deferred Lock:
+--------------
+	unique_lock<mutex> lock(mVar, defer_lock);
+	
+	lock.lock();
+	counter++
+	
+Problem:
+1.	Sum of Numbers.
+	Create a shared variable sum, where you have 3 threads adding 1 to 1000 to sum variable.
+	Focus: on correct placement of mutex lock
+		a. lock_guard 
+		b. unique_lock
+
+2.  Printing series of values:
+
+	Create 3 threads which will 
+		print numbers from 1 - 10
+		output should be like given below
+	Output:
+		Thread #1: 1 2 3 4 5 6 7 8 9 10
+		Thread #2: 1 2 3 4 5 6 7 8 9 10
+		Thread #3: 1 2 3 4 5 6 7 8 9 10
+		
+	Here synchronization is on IO
+
+3. Bank Account Simulation
+	Create a BankAccount class with:
+		balance (shared)
+		deposit(int)
+		withdraw(int)
+	Task
+		Run deposit and withdraw operations from multiple threads
+		Protect the balance using a mutex
+		Focus
+			Mutex inside a class
+			Thread-safe methods
+
+4. Deadlock Scenario (Analysis)
+	Create two mutexes m1 and m2.
+	Task
+		Thread A locks m1 then m2
+		Thread B locks m2 then m1
+	Questions
+		What happens?
+		Why is this dangerous?
+	Focus
+		Deadlock understanding
+	
+	Fixing the above problem:
+		Locking mutexes in a consistent order
+			OR
+		Using std::lock(m1, m2)
+
+5. Shared Resource Access Control
+	Create:
+		One shared resource
+			5 reader threads
+			2 writer threads
+	Task
+		Allow only one writer at a time
+		Readers must wait while writing
+---------------------------------------------------------
+	Condition Variables		
+	-------------------
+	
+	A Condition variable is a synchronization mechanism that allows:
+		One or more threads to wait until a specific condition becomes true.
+		Other threads to notify the waiting threads when the condition changes.
+		
+			<condition_variable>
+			
+			condition_variable obj;
+	In the example code given:
+-------------------------------------		
+		Step-by-Step Execution
+			funOne thread acquires mutex
+			ready == false → funOne thread sleeps
+			Main thread sets ready = true
+			notify_one() wakes funOne thread
+			funOne thread rechecks condition
+			funOne thread proceeds
+-------------------------------------------------------
+	notify_all() --> wakes all waiting threads 
+=====================================================
+Practice:
+	Update the given program on condition variable to have 3 or more child threads which are notified by main thread.
+
+---------------------------------------------------------	
+	Futures and Promises in C++ (Modern)
+	------------------------------------
+		Futures and promises are synchronization mechanism that allow:
+			one thread to produce a value(result) or an exception.
+			Another thread to consume(use) the value later.
+		
+		This mechanism enables one-time communication between threads.
+		Classes involved:
+			promise<T> 		Set(produces) a value 
+			future<T> 		Get(consumes) a value 
+			
+		This is the explanation of the code given:
+			Step-by-Step Execution
+				Main creates promise
+				Main obtains future
+				Promise passed to child(calculateSum) thread
+				Child(calculateSum) computes result
+				Child((calculateSum)) calls set_value()
+				future.get() unblocks
+				Value is returned	
+============================================================
+Shared Futures:
+	A normal future can be consumed only once.
+
+	To allow multiple consumers:
+		shared_future<int> sf = f.share();
+
+	Example use case:
+		Multiple threads waiting for same configuration data
+------------------------------------------------------------
+Next Topic:
+-----------
+	Thread Pools:
+	-------------
+		A thread pool is a concurrency design pattern where:
+		1. create a fixed number of child/worker threads 
+		2. Tasks are assigned/submitted to a queue 
+		3. Worker threads reuse themselves to execute tasks
+		4. Threads are not created and destroyed for each task.
+		
+	A class for implementing the above idea with the concepts we discussed thus far can be applied.
+
+	A SimpleThreadPool{}; //this will not handle return values 
+=====================================================
+	<functional>
+	function<funPointer>
+	
+	function<> is a general purpose polymorphic wrapper that can store and invoke(call) any callable object with a given signature.
+	
+	In C++, for callable objects 
+		1. normal function address
+		2. Lambda expression 
+		3. Functors 
+		4. Member functions 
+		5. functors or callable objects from standard library
+
+	We have already discussed on function pointers(Pointer to functions) in details
+	
+	Here we are looking at an alternative:
+	
+	int Add(int x, int y){
+		return x + y;
+	}
+	int Sub(int x, int y){
+		return x - y;
+	}	
+	
+	function<int (int, int)> fObj = Add;		
+	int res = fObj(100, 200);
+	
+or using Lambda expression
+	fuction<int (int,int)> fObj = [](int x, int y){
+										return x + y;
+									};
+		int res = fObj(10, 20);
+=========================================================
+Next Topic:
+-----------
+	Compiler Options
+		Common g++ Compiler Flags and Their Usage
+		Optimizing Performance with Compiler Flags
+	Debugging with g++
+		Enabling Debugging Information in g++
+		Basic Debugging Techniques
+---------------------------------------------------------
+Most commonly used options:
+---------------------------
+	-o   Output executable file 
+		gcc -o first first.c 
+		g++ -o first first.cpp 
+
+	-Wall 	--> Enable all warnings 
+	-Wextra --> Extra warnings 
+	-std=c++17 --> Use C++17 standard
+	-c 		--> Compilation only 
+	-g 		--> Debug info (Compilation)
+	-I dir  --> Additional Include Directory
+	-L dir  --> Additional Link(Library) Directory
+	-l pthread --> Link Library name 
+
+For Example:	
+	g++ -Wall -Wextra -std=c++17 main.cpp -o app.exe 	
+	
+Some options used in optimization:
+----------------------------------
+	-O0 	--> No optimization (usually in debug)
+	-O1 	--> Basic optimization
+	-O2 	--> Recommended optimization
+	-O3 	--> Aggressive optimization
+	-Os 	--> optimization for size
+---------------------------------------------------------
+gdb --> GNU Debugger
+	--> 
+	gdb executable
+	or 
+	gdb	
+	(gdb) file executable
+	(gdb) b or break function name or line number 
+	(gdb) r or run (the code)
+	(gdb) next (execute the next statement)
+	(gdb) step (step into the function)
+	(gdb) p or print var(printing the variable)
+	(gdb) bt or backtrace (display function call stack)
+	(gdb) quit or q (quit the gdb)
+============================================================
+Problem:
+--------
+6. Write a C program, with 4 functions (fun(), funOne(), funTwo(), funThree()) called from main().
+	Have the prototypes in fun.h
+	definitions in respective files ((fun() --> fun.c), (funOne() --> funOne.c), (funTwo() --> funTwo.c), (funThree() --> funThree.c))
+	(main() --> testMain.c) -->	
+	Create:
+		Static library myLib.a 
+			compile your program with myLib.a 
+			run and test the output 
+			Debug the code using gdb
+		Dynamic library libMine.so 
+			compile your program with libMine.so 
+			run and test the output
+		Debug the code using gdb
+==============================================================
+7. Write a C++ program, with a Class Test with 4 functions (fun(), funOne(), funTwo(), funThree()) called from main().
+	Have the prototypes in fun.h
+	definitions in respective files ((fun() --> fun.cpp), (funOne() --> funOne.cpp), (funTwo() --> funTwo.cpp), (funThree() --> funThree.cpp))
+	(main() --> testMain.cpp) -->	
+	Create: 
+		Static library myLib.a 
+			compile your program with myLib.a 
+			run and test the output 
+		Dynamic library libMine.so 
+			compile your program with libMine.so 
+			run and test the output
+		Debug the code using gdb
+==============================================================
